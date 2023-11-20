@@ -7,6 +7,7 @@ import { Form, ButtonContainer } from './styles';
 import Button from '../Button';
 import isEmailValid from '../../utils/isEmailValid';
 import useErros from '../../hooks/useErros';
+import formatPhone from '../../utils/formatPhone';
 
 export default function ContactForm({ buttonLabel }) {
   const [name, setName] = useState('');
@@ -14,7 +15,11 @@ export default function ContactForm({ buttonLabel }) {
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
 
-  const { setError, removeError, getErrorMessageByName } = useErros();
+  const {
+    setError, removeError, getErrorMessageByName, erros,
+  } = useErros();
+
+  const isFormValid = (name && erros.length === 0);
 
   function handleNameChange(event) {
     setName(event.target.value);
@@ -36,11 +41,15 @@ export default function ContactForm({ buttonLabel }) {
     }
   }
 
+  function handlePhoneChange(event) {
+    setPhone(formatPhone(event.target.value));
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
 
     console.log({
-      name, email, phone, category,
+      name, email, phone: phone.replace(/\D/g, ''), category,
     });
   }
 
@@ -49,7 +58,7 @@ export default function ContactForm({ buttonLabel }) {
       <FormGroup error={getErrorMessageByName('name')}>
         <Input
           error={getErrorMessageByName('name')}
-          placeholder="Nome"
+          placeholder="Nome *"
           value={name}
           onChange={handleNameChange}
         />
@@ -67,7 +76,8 @@ export default function ContactForm({ buttonLabel }) {
         <Input
           placeholder="Telefone"
           value={phone}
-          onChange={(event) => setPhone(event.target.value)}
+          onChange={handlePhoneChange}
+          maxLength="15"
         />
       </FormGroup>
       <FormGroup>
@@ -81,7 +91,7 @@ export default function ContactForm({ buttonLabel }) {
         </Select>
       </FormGroup>
       <ButtonContainer>
-        <Button type="submit">
+        <Button type="submit" disabled={!isFormValid}>
           {buttonLabel}
         </Button>
       </ButtonContainer>
