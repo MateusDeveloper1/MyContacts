@@ -8,6 +8,7 @@ a {
     display: flex;
     align-items: center;
     text-decoration: none;
+    width: min-content;
 
     span {
       color: ${({ theme }) => theme.colors.primary.main};
