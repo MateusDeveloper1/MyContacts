@@ -26,6 +26,7 @@ import magnifierQuestion from '../../assets/images/magnifier-question.svg';
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
 import ContactsService from '../../services/ContactsService';
+import Modal from '../../components/Modal';
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
@@ -72,6 +73,8 @@ export default function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
+
+      <Modal />
 
       {contacts.length > 0 && (
         <InputSearchContainer>
